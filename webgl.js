@@ -9,21 +9,21 @@ function setupWebGL() {
 var positionAttribIndex = 0;
 
 function setupWhatToDraw() {
-	
+
 	var data = [
 		// coordinate (x, y)	// colore (rgb)
-		
+
 		// primo triangolo
 		-1.0, -0.1, 			//1.0, 0.0, 0.0,
-		-1.0,  0.1, 			//1.0, 0.0, 0.0,
-		 1.0, -0.1, 			//0.0, 0.0, 1.0,
+		-1.0, 0.1, 			//1.0, 0.0, 0.0,
+		1.0, -0.1, 			//0.0, 0.0, 1.0,
 
-		 // secondo triangolo
-		 1.0,  0.1, 			//1.0, 0.0, 0.0,
-		 1.0, -0.1, 			//0.0, 0.0, 1.0,
-		-1.0,  0.1 			//1.0, 0.0, 0.0
+		// secondo triangolo
+		1.0, 0.1, 			//1.0, 0.0, 0.0,
+		1.0, -0.1, 			//0.0, 0.0, 1.0,
+		-1.0, 0.1 			//1.0, 0.0, 0.0
 	];
-	
+
 	var typedData = new Float32Array(data);
 	var buffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -93,11 +93,11 @@ function draw() {
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
 }
 
-function hello_draw() {
+function run() {
 	setupWebGL();
 	setupWhatToDraw();
 	setupHowToDraw();
 	draw();
 }
 
-window.onload = hello_draw;
+window.onload = run;
