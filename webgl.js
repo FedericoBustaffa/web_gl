@@ -6,40 +6,38 @@ function setupWebGL() {
 	gl = canvas.getContext('webgl');
 }
 
-var positionAttribIndex = 0;
-
 function setupWhatToDraw() {
 
-	var data = [
-		// coordinate (x, y)	// colore (rgb)
+	var data = new Float32Array([
+		-0.5, -0.5,
+		-0.5,  0.5,
+		0.5, 0.5,
+		 0.5, -0.5
+	]);
 
-		// primo triangolo
-		-1.0, -0.1, 			//1.0, 0.0, 0.0,
-		-1.0, 0.1, 			//1.0, 0.0, 0.0,
-		1.0, -0.1, 			//0.0, 0.0, 1.0,
+	var indices = new Uint16Array([
+		0, 1, 2,
+		2, 3, 0
+	]);
 
-		// secondo triangolo
-		1.0, 0.1, 			//1.0, 0.0, 0.0,
-		1.0, -0.1, 			//0.0, 0.0, 1.0,
-		-1.0, 0.1 			//1.0, 0.0, 0.0
-	];
-
-	var typedData = new Float32Array(data);
 	var buffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-	gl.bufferData(gl.ARRAY_BUFFER, typedData, gl.STATIC_DRAW);
-	gl.enableVertexAttribArray(positionAttribIndex);
-	gl.vertexAttribPointer(positionAttribIndex, 2, gl.FLOAT, false, 2 * Float32Array.BYTES_PER_ELEMENT, 0);
+	gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+	
+	var indexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+	
+	gl.enableVertexAttribArray(0);
+	gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 2 * 4, 0);
 }
 
 function setupHowToDraw() {
 	var vsSource =
 		`attribute vec2 aPosition;
-		varying vec2 vPosition;
 
 		void main()
 		{
-			vPosition = aPosition;
 			gl_Position = vec4(aPosition, 0.0, 1.0);
 		}`;
 
@@ -49,30 +47,10 @@ function setupHowToDraw() {
 
 	var fsSource =
 		`precision highp float;
-		
-		varying vec2 vPosition;
-		vec3 color;
-		
+
 		void main()
 		{
-			if(vPosition.x < 0.0)
-			{
-				color.x = -vPosition.x;
-				color.y = 1.0 + vPosition.x;
-				color.z = 0.0;
-			}
-			else if(vPosition.x > 0.0)
-			{
-				color.x = 0.0;
-				color.y = 1.0 - vPosition.x;
-				color.z = vPosition.x;
-			}
-			else
-			{
-				color = vec3(0.0, 1.0, 0.0);
-			}
-			
-			gl_FragColor = vec4(color, 1.0);
+			gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 		}`;
 
 	var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
@@ -82,7 +60,7 @@ function setupHowToDraw() {
 	var program = gl.createProgram();
 	gl.attachShader(program, vertexShader);
 	gl.attachShader(program, fragmentShader);
-	gl.bindAttribLocation(program, positionAttribIndex, "aPosition");
+	gl.bindAttribLocation(program, 0, "aPosition");
 	gl.linkProgram(program);
 	gl.useProgram(program);
 }
@@ -90,7 +68,7 @@ function setupHowToDraw() {
 function draw() {
 	gl.clearColor(0.2, 0.2, 0.2, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT);
-	gl.drawArrays(gl.TRIANGLES, 0, 6);
+	gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
 }
 
 function run() {
