@@ -10,6 +10,7 @@ function draw() {
 function run() {
 	init();
 	setupGeometry();
+	transformations();
 	buildShaders();
 	draw();
 }

@@ -2,10 +2,11 @@
 function buildShaders() {
 	var vsSource =
 		`attribute vec2 aPosition;
+		uniform mat3 aRotationMatrix;
 
 		void main()
 		{
-			gl_Position = vec4(aPosition, 0.0, 1.0);
+			gl_Position = aRotationMatrix * vec4(aPosition, 0.0, 1.0);
 		}`;
 
 	var vertexShader = gl.createShader(gl.VERTEX_SHADER);
