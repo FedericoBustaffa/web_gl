@@ -152,28 +152,28 @@ function run() {
 	// COLOR
 	var color = new Float32Array([
 		// FRONT red
-		1.0, 0.0, 0.0,
-		1.0, 0.0, 0.0,
-		1.0, 0.0, 0.0,
-		1.0, 0.0, 0.0,
+		1.0, 0.2, 0.2,
+		1.0, 0.2, 0.2,
+		1.0, 0.2, 0.2,
+		1.0, 0.2, 0.2,
 
 		// BACK black
-		0.0, 0.0, 0.0,
-		0.0, 0.0, 0.0,
-		0.0, 0.0, 0.0,
-		0.0, 0.0, 0.0,
+		0.3, 0.5, 0.8,
+		0.3, 0.5, 0.8,
+		0.3, 0.5, 0.8,
+		0.3, 0.5, 0.8,
 
 		// RIGHT green
-		0.0, 1.0, 0.0,
-		0.0, 1.0, 0.0,
-		0.0, 1.0, 0.0,
-		0.0, 1.0, 0.0,
+		0.2, 1.0, 0.2,
+		0.2, 1.0, 0.2,
+		0.2, 1.0, 0.2,
+		0.2, 1.0, 0.2,
 
 		// LEFT blue
-		0.0, 0.0, 1.0,
-		0.0, 0.0, 1.0,
-		0.0, 0.0, 1.0,
-		0.0, 0.0, 1.0,
+		0.3, 0.2, 1.0,
+		0.3, 0.2, 1.0,
+		0.3, 0.2, 1.0,
+		0.3, 0.2, 1.0,
 
 		// TOP yellow
 		1.0, 1.0, 0.0,
@@ -182,10 +182,10 @@ function run() {
 		1.0, 1.0, 0.0,
 
 		// BOTTOM white
-		1.0, 1.0, 1.0,
-		1.0, 1.0, 1.0,
-		1.0, 1.0, 1.0,
-		1.0, 1.0, 1.0
+		0.5, 0.8, 0.8,
+		0.5, 0.8, 0.8,
+		0.5, 0.8, 0.8,
+		0.5, 0.8, 0.8
 	]);
 
 	var colorBuffer = gl.createBuffer();
@@ -219,10 +219,10 @@ function run() {
 	var loop = function () {
 		gl.enable(gl.DEPTH_TEST);
 
-		glMatrix.mat4.rotate(transformationMatrix, transformationMatrix, angle, [1, 1, 1]);
+		glMatrix.mat4.rotate(transformationMatrix, transformationMatrix, angle, [1, 1, 0]);
 		gl.uniformMatrix4fv(transformationLocation, false, transformationMatrix);
 
-		gl.clearColor(0.2, 0.2, 0.2, 1.0);
+		gl.clearColor(0.5, 0.5, 0.5, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 		gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
 
