@@ -1,0 +1,2 @@
+/** @type {WebGLRenderingContext} */
+var gl;
