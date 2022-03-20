@@ -222,7 +222,7 @@ function run() {
 		glMatrix.mat4.rotate(transformationMatrix, transformationMatrix, angle, [1, 1, 0]);
 		gl.uniformMatrix4fv(transformationLocation, false, transformationMatrix);
 
-		gl.clearColor(0.5, 0.5, 0.5, 1.0);
+		gl.clearColor(0.8, 0.8, 0.8, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 		gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
 
