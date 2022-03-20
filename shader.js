@@ -1,70 +1,91 @@
 
-function buildShader() {
-	// vertex shader
-	var vsSource =
-		`attribute vec3 aPosition;
-    	attribute vec3 aColor;
+class Shader {
+	constructor() {
+		// dati
+		this.program = null;
+		this.position_location = null;
+		this.color_location = null;
+		this.model_matrix_location = null;
 
-		uniform mat4 transformationMatrix;
+		// vertex shader
+		var vs_source =
+			`attribute vec3 aPosition;
+			attribute vec3 aColor;
 
-		varying vec3 vColor;
+			uniform mat4 modelMatrix;
+			uniform mat4 viewMatrix;
 
-		void main()
-		{
-			vColor = aColor;
-			gl_Position = transformationMatrix * vec4(aPosition, 1.0);
-		}`;
+			varying vec3 vColor;
 
-	var vertexShader = gl.createShader(gl.VERTEX_SHADER);
-	gl.shaderSource(vertexShader, vsSource);
-	gl.compileShader(vertexShader);
+			void main()
+			{
+				vColor = aColor;
+				gl_Position = viewMatrix * modelMatrix * vec4(aPosition, 1.0);
+			}`;
 
-	// vertex compiling info
-	if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-		console.log("vertex compiling error:", gl.getShaderInfoLog(vertexShader));
-		return null;
-	}
-	else
-		console.log("vertex compiling success");
+		var vertex_shader = gl.createShader(gl.VERTEX_SHADER);
+		gl.shaderSource(vertex_shader, vs_source);
+		gl.compileShader(vertex_shader);
 
-	// fragment shader
-	var fsSource =
-		`precision highp float;
+		// vertex compiling info
+		if (!gl.getShaderParameter(vertex_shader, gl.COMPILE_STATUS)) {
+			console.log("vertex compiling error:", gl.getShaderInfoLog(vertex_shader));
+			return null;
+		}
+		else
+			console.log("vertex compiling success");
+
+		// fragment shader
+		var fs_source =
+			`precision highp float;
 		
-		varying vec3 vColor;
+			varying vec3 vColor;
 		
-		void main()
-		{
-			gl_FragColor = vec4(vColor, 1.0);
-		}`;
+			void main()
+			{
+				gl_FragColor = vec4(vColor, 1.0);
+			}`;
 
-	var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-	gl.shaderSource(fragmentShader, fsSource);
-	gl.compileShader(fragmentShader);
+		var fragment_shader = gl.createShader(gl.FRAGMENT_SHADER);
+		gl.shaderSource(fragment_shader, fs_source);
+		gl.compileShader(fragment_shader);
 
-	// fragment shader compiling info
-	if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
-		console.log("fragment compiling error:", gl.getShaderInfoLog(fragmentShader));
-		return null;
+		// fragment shader compiling info
+		if (!gl.getShaderParameter(fragment_shader, gl.COMPILE_STATUS)) {
+			console.log("fragment compiling error:", gl.getShaderInfoLog(fragment_shader));
+			return null;
+		}
+		else
+			console.log("fragment compiling success");
+
+		this.program = gl.createProgram();
+		gl.attachShader(this.program, vertex_shader);
+		gl.attachShader(this.program, fragment_shader);
+		gl.linkProgram(this.program);
+		gl.validateProgram(this.program);
+
+		// program compile info
+		if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
+			console.log("program linking error:", gl.getProgramInfoLog(program));
+			return null;
+		}
+		else
+			console.log("program linking success");
+
+		gl.useProgram(this.program);
+
+		this.position_location = gl.getAttribLocation(this.program, "aPosition");
+		this.color_location = gl.getAttribLocation(this.program, "aColor");
+		this.model_matrix_location = gl.getUniformLocation(this.program, "modelMatrix");
+		this.view_matrix_location = gl.getUniformLocation(this.program, "viewMatrix");
 	}
-	else
-		console.log("fragment compiling success");
 
-	var program = gl.createProgram();
-	gl.attachShader(program, vertexShader);
-	gl.attachShader(program, fragmentShader);
-	gl.linkProgram(program);
-	gl.validateProgram(program);
-
-	// program compile info
-	if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-		console.log("program linking error:", gl.getProgramInfoLog(program));
-		return null;
+	// metodi
+	bind() {
+		gl.useProgram(this.program);
 	}
-	else
-		console.log("program linking success");
 
-	gl.useProgram(program);
-
-	return program;
+	unbind() {
+		gl.useProgram(null);
+	}
 }
