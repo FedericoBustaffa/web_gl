@@ -5,7 +5,13 @@ function run() {
 	gl = canvas.getContext('webgl');
 
 	var program = buildShader();
-	buildGeometry(program);
+	var cube = new Cube(program);
+	cube.setFaceColor(0, 1.0, 0.0, 0.0);
+	cube.setFaceColor(1, 0.0, 0.0, 1.0);
+	cube.setFaceColor(2, 0.0, 1.0, 0.0);
+	cube.setFaceColor(3, 1.0, 1.0, 0.0);
+	cube.setFaceColor(4, 1.0, 1.0, 1.0);
+	cube.setFaceColor(5, 0.0, 0.0, 0.0);
 
 	// TRANSFORMATION
 	var translationMatrix = glMatrix.mat4.create();

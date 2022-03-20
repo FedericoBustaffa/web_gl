@@ -1,44 +1,48 @@
 
-function buildGeometry(program) {
-	var vertices = new Float32Array([
+function Cube(program, side_length = 1.0, r = 0.0, g = 0.0, b = 0.0) {
+
+	this.program = program;
+	var half = side_length / 2;
+
+	this.vertices = new Float32Array([
 		// FRONT
-		-0.5, -0.5, -0.5,
-		-0.5, 0.5, -0.5,
-		0.5, 0.5, -0.5,
-		0.5, -0.5, -0.5,
+		-half, -half, -half,
+		-half, half, -half,
+		half, half, -half,
+		half, -half, -half,
 
 		// TOP
-		-0.5, 0.5, -0.5,
-		-0.5, 0.5, 0.5,
-		0.5, 0.5, 0.5,
-		0.5, 0.5, -0.5,
+		-half, half, -half,
+		-half, half, half,
+		half, half, half,
+		half, half, -half,
 
 		// LEFT
-		-0.5, -0.5, -0.5,
-		-0.5, 0.5, -0.5,
-		-0.5, 0.5, 0.5,
-		-0.5, -0.5, 0.5,
+		-half, -half, -half,
+		-half, half, -half,
+		-half, half, half,
+		-half, -half, half,
 
 		// BACK
-		-0.5, -0.5, 0.5,
-		-0.5, 0.5, 0.5,
-		0.5, 0.5, 0.5,
-		0.5, -0.5, 0.5,
+		-half, -half, half,
+		-half, half, half,
+		half, half, half,
+		half, -half, half,
 
 		// BOTTOM
-		-0.5, -0.5, -0.5,
-		-0.5, -0.5, 0.5,
-		0.5, -0.5, 0.5,
-		0.5, -0.5, -0.5,
+		-half, -half, -half,
+		-half, -half, half,
+		half, -half, half,
+		half, -half, -half,
 
 		// RIGHT
-		0.5, -0.5, -0.5,
-		0.5, 0.5, -0.5,
-		0.5, 0.5, 0.5,
-		0.5, -0.5, 0.5
+		half, -half, -half,
+		half, half, -half,
+		half, half, half,
+		half, -half, half
 	]);
 
-	var indices = new Uint16Array([
+	this.indices = new Uint16Array([
 		// FRONT
 		0, 1, 2,
 		2, 3, 0,
@@ -64,62 +68,99 @@ function buildGeometry(program) {
 		22, 23, 20
 	]);
 
-	var verticesBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, verticesBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+	this.verticesBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.verticesBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.STATIC_DRAW);
 
-	var indexBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+	this.indexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indices, gl.STATIC_DRAW);
 
-	var posLocation = gl.getAttribLocation(program, "aPosition");
+	var posLocation = gl.getAttribLocation(this.program, "aPosition");
 	gl.enableVertexAttribArray(posLocation);
 	gl.vertexAttribPointer(posLocation, 3, gl.FLOAT, false, 3 * 4, 0);
 
+	this.setSideLength = function (new_length) {
+		for (let i = 0; i < this.vertices.length; i++) {
+			if (this.vertices[i] < 0)
+				this.vertices[i] = -(new_length / 2);
+			else
+				this.vertices[i] = new_length / 2;
+		}
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, this.verticesBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.STATIC_DRAW);
+
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indices, gl.STATIC_DRAW);
+	}
+
 	// COLOR
-	var color = new Float32Array([
-		// FRONT red
-		1.0, 0.2, 0.2,
-		1.0, 0.2, 0.2,
-		1.0, 0.2, 0.2,
-		1.0, 0.2, 0.2,
+	this.color = new Float32Array([
+		// FRONT
+		r, g, b,
+		r, g, b,
+		r, g, b,
+		r, g, b,
 
-		// BACK black
-		0.3, 0.5, 0.8,
-		0.3, 0.5, 0.8,
-		0.3, 0.5, 0.8,
-		0.3, 0.5, 0.8,
+		// TOP
+		r, g, b,
+		r, g, b,
+		r, g, b,
+		r, g, b,
 
-		// RIGHT green
-		0.2, 1.0, 0.2,
-		0.2, 1.0, 0.2,
-		0.2, 1.0, 0.2,
-		0.2, 1.0, 0.2,
+		// LEFT
+		r, g, b,
+		r, g, b,
+		r, g, b,
+		r, g, b,
 
-		// LEFT blue
-		0.3, 0.2, 1.0,
-		0.3, 0.2, 1.0,
-		0.3, 0.2, 1.0,
-		0.3, 0.2, 1.0,
+		// LEFT
+		r, g, b,
+		r, g, b,
+		r, g, b,
+		r, g, b,
 
-		// TOP yellow
-		1.0, 1.0, 0.0,
-		1.0, 1.0, 0.0,
-		1.0, 1.0, 0.0,
-		1.0, 1.0, 0.0,
+		// TOP
+		r, g, b,
+		r, g, b,
+		r, g, b,
+		r, g, b,
 
-		// BOTTOM white
-		0.5, 0.8, 0.8,
-		0.5, 0.8, 0.8,
-		0.5, 0.8, 0.8,
-		0.5, 0.8, 0.8
+		// BOTTOM
+		r, g, b,
+		r, g, b,
+		r, g, b,
+		r, g, b
 	]);
 
-	var colorBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, color, gl.STATIC_DRAW);
+	this.colorBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, this.color, gl.STATIC_DRAW);
 
-	var colorLocation = gl.getAttribLocation(program, "aColor");
-	gl.enableVertexAttribArray(colorLocation);
-	gl.vertexAttribPointer(colorLocation, 3, gl.FLOAT, false, 3 * 4, 0);
+	this.colorLocation = gl.getAttribLocation(this.program, "aColor");
+	gl.enableVertexAttribArray(this.colorLocation);
+	gl.vertexAttribPointer(this.colorLocation, 3, gl.FLOAT, false, 3 * 4, 0);
+
+	this.fillColor = function (r, g, b) {
+		for (let i = 0; i < this.color.length; i += 3) {
+			this.color[i] = r;
+			this.color[i + 1] = g;
+			this.color[i + 2] = b;
+		}
+
+		gl.bufferData(gl.ARRAY_BUFFER, this.color, gl.STATIC_DRAW);
+	}
+
+	this.setFaceColor = function (face, r, g, b) {
+		var index = face * 12;
+		for (let i = index; i < index + 12; i += 3) {
+			this.color[i] = r;
+			this.color[i + 1] = g;
+			this.color[i + 2] = b;
+		}
+
+		gl.bufferData(gl.ARRAY_BUFFER, this.color, gl.STATIC_DRAW);
+	}
+
 }
