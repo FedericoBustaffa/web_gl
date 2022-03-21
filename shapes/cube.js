@@ -1,43 +1,15 @@
 
 class Cube {
-	constructor(shader, side_length = 1.0, r = 0.0, g = 0.0, b = 0.0) {
-		var half = side_length / 2;
+	constructor(shader) {
 		this.vertices = new Float32Array([
-			// FRONT
-			-half, -half, -half,
-			-half, half, -half,
-			half, half, -half,
-			half, -half, -half,
-
-			// TOP
-			-half, half, -half,
-			-half, half, half,
-			half, half, half,
-			half, half, -half,
-
-			// LEFT
-			-half, -half, -half,
-			-half, half, -half,
-			-half, half, half,
-			-half, -half, half,
-
-			// BACK
-			-half, -half, half,
-			-half, half, half,
-			half, half, half,
-			half, -half, half,
-
-			// BOTTOM
-			-half, -half, -half,
-			-half, -half, half,
-			half, -half, half,
-			half, -half, -half,
-
-			// RIGHT
-			half, -half, -half,
-			half, half, -half,
-			half, half, half,
-			half, -half, half
+			-0.5, -0.5, 0.5,	// left bottom front
+			-0.5, 0.5, 0.5,	// left top front
+			0.5, 0.5, 0.5,		// right top front
+			0.5, -0.5, 0.5,	// right bottom front
+			-0.5, -0.5, -0.5,	// left bottom back
+			-0.5, 0.5, -0.5, 	// left top back
+			0.5, 0.5, -0.5,		// right top back
+			0.5, -0.5, -0.5		// right bottom back
 		]);
 
 		this.indices = new Uint16Array([
@@ -49,59 +21,32 @@ class Cube {
 			4, 5, 6,
 			6, 7, 4,
 
-			// RIGHT
-			8, 9, 10,
-			10, 11, 8,
-
 			// LEFT
-			12, 13, 14,
-			14, 15, 12,
+			4, 5, 1,
+			1, 0, 4,
+
+			// RIGHT
+			7, 6, 2,
+			2, 3, 7,
 
 			// TOP
-			16, 17, 18,
-			18, 19, 16,
+			1, 5, 6,
+			6, 2, 1,
 
 			// BOTTOM
-			20, 21, 22,
-			22, 23, 20
+			0, 4, 7,
+			7, 3, 0
 		]);
 
 		this.color = new Float32Array([
-			// FRONT
-			r, g, b,
-			r, g, b,
-			r, g, b,
-			r, g, b,
-
-			// TOP
-			r, g, b,
-			r, g, b,
-			r, g, b,
-			r, g, b,
-
-			// LEFT
-			r, g, b,
-			r, g, b,
-			r, g, b,
-			r, g, b,
-
-			// LEFT
-			r, g, b,
-			r, g, b,
-			r, g, b,
-			r, g, b,
-
-			// TOP
-			r, g, b,
-			r, g, b,
-			r, g, b,
-			r, g, b,
-
-			// BOTTOM
-			r, g, b,
-			r, g, b,
-			r, g, b,
-			r, g, b
+			1.0, 0.0, 0.0,	// red
+			0.0, 1.0, 0.0,	// green
+			0.0, 0.0, 1.0,	// blue
+			1.0, 1.0, 0.0,	// yellow
+			0.0, 1.0, 1.0,	// cyan
+			1.0, 0.0, 1.0,	// magenta
+			1.0, 1.0, 1.0,	// white
+			0.0, 0.0, 0.0	// black
 		]);
 
 		this.shader = shader;

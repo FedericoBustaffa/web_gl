@@ -2,8 +2,10 @@
 class ModelMatrix {
 	constructor(location) {
 		this.location = location;
+		this.translation_matrix = glMatrix.mat4.create();
+		this.rotation_matrix = glMatrix.mat4.create();
+		this.scale_matrix = glMatrix.mat4.create();
 		this.matrix = glMatrix.mat4.create();
-		glMatrix.mat4.identity(this.matrix);
 		gl.uniformMatrix4fv(location, false, this.matrix);
 	}
 

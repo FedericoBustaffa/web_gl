@@ -8,6 +8,8 @@ class ViewMatrix {
 	}
 
 	translate(vector) {
+		vector[0] = -vector[0];
+		vector[1] = -vector[1];
 		glMatrix.mat4.translate(this.matrix, this.matrix, vector);
 		gl.uniformMatrix4fv(this.location, false, this.matrix);
 	}
