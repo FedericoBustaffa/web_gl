@@ -20,7 +20,6 @@ class ModelMatrix {
 	scale(scale_values) {
 		glMatrix.mat4.scale(this.matrix, this.matrix, scale_values);
 		gl.uniformMatrix4fv(this.location, false, this.matrix);
-
 	}
 }
 

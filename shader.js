@@ -9,18 +9,19 @@ class Shader {
 
 		// vertex shader
 		var vs_source =
-			`attribute vec3 aPosition;
-			attribute vec3 aColor;
+			`attribute vec3 a_position;
+			attribute vec3 a_color;
 
-			uniform mat4 modelMatrix;
-			uniform mat4 viewMatrix;
+			uniform mat4 model;
+			uniform mat4 view;
+			uniform mat4 projection;
 
-			varying vec3 vColor;
+			varying vec3 v_color;
 
 			void main()
 			{
-				vColor = aColor;
-				gl_Position = viewMatrix * modelMatrix * vec4(aPosition, 1.0);
+				v_color = a_color;
+				gl_Position = projection * view * model * vec4(a_position, 1.0);
 			}`;
 
 		var vertex_shader = gl.createShader(gl.VERTEX_SHADER);
@@ -32,18 +33,16 @@ class Shader {
 			console.log("vertex compiling error:", gl.getShaderInfoLog(vertex_shader));
 			return null;
 		}
-		else
-			console.log("vertex compiling success");
 
 		// fragment shader
 		var fs_source =
 			`precision highp float;
 		
-			varying vec3 vColor;
+			varying vec3 v_color;
 		
 			void main()
 			{
-				gl_FragColor = vec4(vColor, 1.0);
+				gl_FragColor = vec4(v_color, 1.0);
 			}`;
 
 		var fragment_shader = gl.createShader(gl.FRAGMENT_SHADER);
@@ -55,8 +54,6 @@ class Shader {
 			console.log("fragment compiling error:", gl.getShaderInfoLog(fragment_shader));
 			return null;
 		}
-		else
-			console.log("fragment compiling success");
 
 		this.program = gl.createProgram();
 		gl.attachShader(this.program, vertex_shader);
@@ -69,15 +66,14 @@ class Shader {
 			console.log("program linking error:", gl.getProgramInfoLog(program));
 			return null;
 		}
-		else
-			console.log("program linking success");
 
 		gl.useProgram(this.program);
 
-		this.position_location = gl.getAttribLocation(this.program, "aPosition");
-		this.color_location = gl.getAttribLocation(this.program, "aColor");
-		this.model_matrix_location = gl.getUniformLocation(this.program, "modelMatrix");
-		this.view_matrix_location = gl.getUniformLocation(this.program, "viewMatrix");
+		this.position_location = gl.getAttribLocation(this.program, "a_position");
+		this.color_location = gl.getAttribLocation(this.program, "a_color");
+		this.model_matrix_location = gl.getUniformLocation(this.program, "model");
+		this.view_matrix_location = gl.getUniformLocation(this.program, "view");
+		this.projection_matrix_location = gl.getUniformLocation(this.program, "projection");
 	}
 
 	// metodi
