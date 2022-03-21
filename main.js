@@ -26,7 +26,7 @@ function run() {
 		// BG COLOR
 		renderer.clear(0.8, 0.8, 0.8);
 
-		// DRAW CALL
+		// DRAW
 		renderer.draw(cube);
 
 		requestAnimationFrame(loop);
