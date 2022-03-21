@@ -117,7 +117,7 @@ class Cube {
 		gl.vertexAttribPointer(this.shader.color_location, 3, gl.FLOAT, false, 3 * 4, 0);
 	}
 
-	draw_indices() {
+	getIndices() {
 		return this.index_buffer.size();
 	}
 

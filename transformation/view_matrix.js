@@ -4,13 +4,10 @@ class ViewMatrix {
 		this.location = location;
 		this.matrix = glMatrix.mat4.create();
 		glMatrix.mat4.identity(this.matrix);
-		gl.uniformMatrix4fv(this.location, false, this.matrix);
+		gl.uniformMatrix4fv(location, false, this.matrix);
 	}
 
 	translate(vector) {
-		vector[0] = -vector[0];
-		vector[1] = -vector[1];
-		vector[2] = -vector[2];
 		glMatrix.mat4.translate(this.matrix, this.matrix, vector);
 		gl.uniformMatrix4fv(this.location, false, this.matrix);
 	}
