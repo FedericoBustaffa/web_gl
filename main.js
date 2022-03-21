@@ -1,7 +1,7 @@
 
 function run() {
 
-	var canvas = document.getElementById("CANVAS");
+	canvas = document.getElementById("CANVAS");
 	gl = canvas.getContext('webgl');
 
 	var shader = new Shader();
@@ -16,9 +16,6 @@ function run() {
 	var model = new ModelMatrix(shader.model_matrix_location);
 	var view = new ViewMatrix(shader.view_matrix_location);
 	var projection = new ProjectionMatrix(shader.projection_matrix_location);
-	model.translate([0, 0, -0.4]);
-	model.rotate(Math.PI / 2.0, [1, 0, 0]);
-
 	// RUNNING LOOP
 	//var angle = 0.01;
 	var loop = function () {
