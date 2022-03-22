@@ -1,8 +1,7 @@
 
 class Cube extends Shape {
 	constructor(shader) {
-		attributes = [];
-		attributes.push(new Float32Array([
+		var vertices = new Float32Array([
 			-1.0, -1.0, 1.0,	// left bottom front
 			-1.0, 1.0, 1.0,		// left top front
 			1.0, 1.0, 1.0,		// right top front
@@ -11,7 +10,7 @@ class Cube extends Shape {
 			-1.0, 1.0, -1.0, 	// left top back
 			1.0, 1.0, -1.0,		// right top back
 			1.0, -1.0, -1.0		// right bottom back
-		]));
+		]);
 
 		var indices = new Uint16Array([
 			// FRONT
@@ -39,7 +38,7 @@ class Cube extends Shape {
 			7, 3, 0
 		]);
 
-		attributes.push(new Float32Array([
+		var color = new Float32Array([
 			1.0, 0.0, 0.0,	// red
 			0.0, 1.0, 0.0,	// green
 			0.0, 0.0, 1.0,	// blue
@@ -48,12 +47,8 @@ class Cube extends Shape {
 			1.0, 0.0, 1.0,	// magenta
 			1.0, 1.0, 1.0,	// white
 			0.0, 0.0, 0.0	// black
-		]));
+		]);
 
-		layout = new Layout();
-		layout.add(shader.position_location, 3, 4 * 3);
-		layout.add(shader.color_location, 3, 4 * 3);
-
-		super(shader, attributes, indices, layout);
+		super(shader, vertices, indices, color);
 	}
 }
