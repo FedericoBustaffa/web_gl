@@ -1,23 +1,34 @@
 
 class Shape {
-	constructor(shader, vertices, indices, color) {
+	constructor(shader, attributes, layout) {
 		this.shader = shader;
-		this.vertices = vertices;
-		this.indices = indices;
-		this.color = color;
 
-		this.vertex_buffer = new Buffer(vertices);
-		gl.enableVertexAttribArray(this.shader.position_location);
-		gl.vertexAttribPointer(this.shader.position_location, 3, gl.FLOAT, false, 3 * 4, 0);
+		this.attribute_buffer = [];
+		this.layout = layout;
+		for (let i = 0; i < attributes.length; i++) {
+			this.attribute_buffer.push(new Buffer(attributes[i]));
+		}
+
+		this.vertex_array = new VertexArray();
 
 		this.index_buffer = new IndexBuffer(indices);
-
-		this.color_buffer = new Buffer(color);
-		gl.enableVertexAttribArray(this.shader.color_location);
-		gl.vertexAttribPointer(this.shader.color_location, 3, gl.FLOAT, false, 3 * 4, 0);
 	}
 
 	getIndices() {
-		return this.indices.length;
+		return this.index_buffer.size();
+	}
+
+	bind() {
+		this.vertex_array.bind();
+		this.vertex_buffer.bind();
+		this.index_buffer.bind();
+		this.color_buffer.bind();
+	}
+
+	unbind() {
+		this.vertex_array.unbind();
+		this.vertex_buffer.unbind();
+		this.index_buffer.unbind();
+		this.color_buffer.unbind();
 	}
 }
