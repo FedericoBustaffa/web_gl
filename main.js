@@ -15,7 +15,7 @@ function setup() {
 	var projection = new ProjectionMatrix(shader.projection_matrix_location);
 
 	// static transformations
-	model.translate([0, 0, -10]);
+	model.translate([0, 0, -20]);
 
 	// eventi
 	window.addEventListener("keydown", e => {
