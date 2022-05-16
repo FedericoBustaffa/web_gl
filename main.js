@@ -4,7 +4,7 @@ function setup() {
 	canvas = document.getElementById("CANVAS");
 	gl = canvas.getContext('webgl');
 
-	// core
+	// core //
 	var shader = new Shader();
 	var renderer = new Renderer();
 	var cube = new Cube(shader);
